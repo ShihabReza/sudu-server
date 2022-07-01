@@ -47,7 +47,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-  res.send('Node JS')
+  res.send('Node JS baken')
 })
 
 app.listen(port, () => {
