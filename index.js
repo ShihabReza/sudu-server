@@ -14,12 +14,12 @@ async function run() {
       const appCollection = client.db('tudu-app').collection('app');
      
       
-      app.get('/app',async(req, res) => {
-            const query = {}
-            const cursor = appCollection.find(query)
-            const apps = await cursor.toArray()
-            res.send(apps)
-      })
+      app.post('/app',async(req, res) => {
+        const app = req.body
+        const result = appCollection.insertOne(app)
+        res.send(app)
+        
+    })
     
     
     
