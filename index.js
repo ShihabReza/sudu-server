@@ -1,29 +1,45 @@
 const express = require('express')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-var cors = require('cors')
+const cors = require('cors')
+
 const app = express()
+
 const port = process.env.PORT || 5000
+
 app.use(express.json());
+
+require('dotenv').config()
+
 app.use(cors())
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.mpzy2.mongodb.net/?retryWrites=true&w=majority`;
+
+
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.llimy0q.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  console.log('DB Connection')
+  // perform actions on the collection object
+  // client.close();
+});
+
 async function run() {
   try {
-    
-    await client.connect();
-      const appCollection = client.db('tudu-app').collection('app');
-     
+    const appCollection = client.db('tudu-app').collection('app');
+    const todoCollection = client.db('tudu-app').collection('app');
+
+    app.get('/app',async(req, res) => {
+      const query = {}
+      const cursor = appCollection.find(query)
+      const app = await cursor.toArray()
+      res.send(app)
+})
+    app.post('/app',async(req, res) => {
+      const newapp = req.body
+      const app = todoCollection.insertOne(newapp)
+      res.send(app)
       
-      app.post('/app',async(req, res) => {
-        const app = req.body
-        const result = appCollection.insertOne(app)
-        res.send(app)
-        
-    })
-    
-    
-    
-    
+  })
   } finally {
    
   }
